@@ -1,0 +1,15 @@
+﻿<Properties StartupConfiguration="{A866FD61-6737-0F2C-DF0F-4F8F99BDDDE0}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/TransitionManager.cs">
+    <Files>
+      <File FileName="Assets/Script/TextShake.cs" Line="30" Column="51" />
+      <File FileName="Assets/Script/TransitionManager.cs" Line="21" Column="17" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>

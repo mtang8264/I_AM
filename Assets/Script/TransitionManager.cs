@@ -43,6 +43,11 @@ public class TransitionManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            GoToTitle();
+        }
+
         switch(state)
         {
             case State.IN:
@@ -109,4 +114,20 @@ public class TransitionManager : MonoBehaviour
 
     public enum State { IN, OUT, OFF };
     public enum Transition { HORIZONTAL, VERTICAL, FADE };
+
+    public void GoToTitle()
+    {
+        if(SceneManager.GetActiveScene().name == "Scene_0")
+        {
+            Application.Quit();
+        }
+
+        curveOut = new AnimationCurve();
+        curveOut.AddKey(0, 0);
+        curveOut.AddKey(1, 12);
+        transitionOut = Transition.VERTICAL;
+        state = State.OUT;
+        targetScene = "Scene_0";
+        startTime = Time.time;
+    }
 }

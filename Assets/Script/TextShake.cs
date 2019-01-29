@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TextShake : MonoBehaviour
 {
+    int startCount;
     public Sprite[] sprites = new Sprite[10];
     public List<Sprite> spritesToUse = new List<Sprite>();
     public float timeToChange;
@@ -19,6 +20,8 @@ public class TextShake : MonoBehaviour
         timeToChange = Random.Range(minimumTime, maximumTime);
         spritesToUse = new List<Sprite>(sprites);
         lastChange = Time.time;
+
+        startCount = sprites.Length;
     }
 
     // Update is called once per frame
@@ -37,7 +40,7 @@ public class TextShake : MonoBehaviour
             if (count == 0)
             {
                 spritesToUse = new List<Sprite>(sprites);
-                count = 10;
+                count = startCount;
             }
 
             int selection = Random.Range(0, count - 1);

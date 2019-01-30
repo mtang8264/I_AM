@@ -60,7 +60,7 @@ public class TransitionManager : MonoBehaviour
                 switch(transitionIn)
                 {
                     case Transition.FADE:
-                        fade.color = new Color(0, 0, 0, curveIn.Evaluate(Time.time - startTime));
+                        fade.color = new Color(fade.color.r, fade.color.g, fade.color.b, curveIn.Evaluate(Time.time - startTime));
                         break;
                     case Transition.HORIZONTAL:
                         Camera.main.transform.position = new Vector3(curveIn.Evaluate(Time.time - startTime), 0, -10);
@@ -87,7 +87,7 @@ public class TransitionManager : MonoBehaviour
                 switch(transitionOut)
                 {
                     case Transition.FADE:
-                        fade.color = new Color(0, 0, 0, curveOut.Evaluate(Time.time - startTime));
+                        fade.color = new Color(fade.color.r, fade.color.g, fade.color.b, curveOut.Evaluate(Time.time - startTime));
                         break;
                     case Transition.HORIZONTAL:
                         Camera.main.transform.position = new Vector3(curveOut.Evaluate(Time.time - startTime), 0, -10);
@@ -99,6 +99,10 @@ public class TransitionManager : MonoBehaviour
 
                 if(Time.time - startTime >= 1f)
                 {
+                    if(targetScene == "")
+                    {
+                        SceneManager.LoadScene(0);
+                    }
                     SceneManager.LoadScene(targetScene);
                 }
                 break;

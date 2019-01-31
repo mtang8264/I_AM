@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class Pointer : MonoBehaviour
 {
-    public Texture2D[] cursors;
-    public List<Texture2D> currentCursors;
+    public CursorColor cursorColor;
+    public Texture2D[] whiteCursors;
+    public Texture2D[] blackCursors;
+    Texture2D[] cursors;
+    List<Texture2D> currentCursors;
     int options;
     float minTime = 0.08f;
     float maxTime = 0.2f;
@@ -15,7 +18,17 @@ public class Pointer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        DontDestroyOnLoad(gameObject);
+        switch(cursorColor)
+        {
+            case CursorColor.WHITE:
+                cursors = whiteCursors;
+                break;
+            case CursorColor.BLACK:
+                cursors = blackCursors;
+                break;
+        }
+
+        //DontDestroyOnLoad(gameObject);
 
         lastTime = Time.time;
         waitTime = Random.Range(minTime, maxTime);
@@ -44,4 +57,6 @@ public class Pointer : MonoBehaviour
             currentCursors.RemoveAt(selection);
         }
     }
+
+    public enum CursorColor { WHITE, BLACK };
 }

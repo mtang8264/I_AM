@@ -50,15 +50,14 @@ public class WalkArrow : MonoBehaviour
     }
 
     private void FixedUpdate()
-    {
-        if(transform.position.x < minX)
+    { 
+        if(TransitionManager.instance.state == TransitionManager.State.OFF)
+        {
+            transform.parent = TransitionManager.instance.transform;
+        }
+        else
         {
             transform.parent = null;
-            transform.position = new Vector3(minX, 0);
-        }
-        else if(person.transform.position.x > float.Epsilon)
-        {
-            transform.parent = person.transform;
         }
     }
 

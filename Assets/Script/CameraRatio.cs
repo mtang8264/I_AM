@@ -20,13 +20,13 @@ public class CameraRatio : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Screen.width / Screen.height == 16 / 10)
-        {
-            Camera.main.orthographicSize = 5.5f;
-        }
-        else if (Screen.width / Screen.height == 16 / 9)
+        if (Camera.main.aspect > 1.65f)
         {
             Camera.main.orthographicSize = 5f;
+        }
+        else if (Camera.main.aspect < 1.65f)
+        {
+            Camera.main.orthographicSize = 5.5f;
         }
     }
 }

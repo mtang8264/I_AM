@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class TitleScreen : MonoBehaviour
 {
-    TransitionManager transitionManager;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -15,9 +13,7 @@ public class TitleScreen : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transitionManager = TransitionManager.instance;
-
-        if (Input.GetKeyDown(KeyCode.Space))
-            transitionManager.Go();
+        if (Input.GetMouseButtonDown(0))
+            TransitionManager.instance.Go();
     }
 }

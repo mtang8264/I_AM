@@ -7,6 +7,7 @@ public class Person : MonoBehaviour
     public Phase phase = Phase.WORK;
     public float speed = 1f;
     public float changePosition = 25f;
+    public float walk = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -20,7 +21,7 @@ public class Person : MonoBehaviour
         switch(phase)
         {
             case Phase.WORK:
-                transform.Translate(new Vector3(Input.GetAxis("Horizontal"), 0) * Time.deltaTime * speed);
+                transform.Translate(new Vector3(walk, 0) * Time.deltaTime * speed);
                 if(Input.GetAxis("Horizontal") > 0)
                 {
                     transform.localScale = new Vector3(0.75f, 0.75f, 1);
@@ -31,7 +32,7 @@ public class Person : MonoBehaviour
                 }
                 break;
             case Phase.BACK:
-                transform.Translate(new Vector3(Mathf.Abs(Input.GetAxis("Horizontal")) * -1, 0) * Time.deltaTime * speed);
+                transform.Translate(new Vector3(Mathf.Abs(walk) * -1, 0) * Time.deltaTime * speed);
                 transform.localScale = new Vector3(-0.75f, 0.75f, 1);
                 break;
         }

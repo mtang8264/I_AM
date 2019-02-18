@@ -61,17 +61,12 @@ public class Ball : MonoBehaviour
             temp.GetComponent<Rigidbody2D>().AddForce(direction * force, ForceMode2D.Impulse);
         }
 
-        Debug.Log(collision.collider.gameObject.layer);
+        //Debug.Log(collision.collider.gameObject.layer);
         
 
         if(collision.collider.gameObject.layer != 11)
         {
             drag = false;
-        }
-        else
-        {
-            TransitionManager.instance.Go();    
-            Destroy(this);
         }
     }
 }

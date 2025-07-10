@@ -4,8 +4,6 @@ extends Sprite2D
 var path_to_sprites : String
 # The file extension of the word's textures
 var file_extention: String = ".png"
-# The number of unique variations of the texture there are
-var sprite_variation_count : int
 
 # Array of all the textures for the word
 var sprites = Array([], TYPE_OBJECT, "CompressedTexture2D", null)
@@ -34,37 +32,24 @@ func _process(delta):
 
 # Finds the resource files for the sprites and 
 func load_sprites():
-	# Breaks the resource_path of the starting texture into an array to work on it
-	var path_array = Array(texture.resource_path.split("/", true))
-	# Pop off the last element of the path array to seperate the file name format, then split it for editting
-	var file_name_array = Array(path_array.pop_back().split("_",true))
-	# Just take the parts of the file name before the number
-	var file_name_string = file_name_array[0] + "_" + file_name_array[1] + "_"
-	# Add the first part of the path_array back to a new string of the folder path
-	var path_string = path_array[0]
-	# Add all the other elements of the path with slashes
-	for x in range(1,path_array.size()):
-		path_string = path_string + "/" + str(path_array[x])
-	# Open the directory so we can count how many variations there are
-	var dir = DirAccess.open(path_string)
-	# Add the pre-number part of the file name to the path
-	path_string = path_string + "/" + file_name_string
-	# Save that path for future use
-	path_to_sprites = path_string
+	# The directory which the starting texture is held within
+	var dir = DirAccess.open( texture.resource_path.left( texture.resource_path.rfind("/")))
+	# An array of the file names in the directory
+	var dir_array = dir.get_files()
+	# The number of files in the directory
+	var dir_size = dir_array.size()
 	
-	# Count how many variations there are. This is divided by 2 because there is a texture and a .import file for each.
-	sprite_variation_count = dir.get_files().size() / 2
-	
-	# Add each variation to the sprites array
-	for x in range(sprite_variation_count):
-		sprites.append(load(path_to_sprites + str(x) + file_extention))
-	sprite_variation_count = sprites.size()
+	# Go through each file in the directory and if it isn't a ".import" file add it to the list.
+	for x in dir_size:
+		var file = dir.get_current_dir() + "/" + dir.get_files()[x]
+		if file.ends_with(".png"):
+			sprites.append(load(file))
 
 # Called when the sprite is changed.
 func change_sprite():
 	# Create a list of all the indexes that have not been used recently
 	var possible_choices = Array([], TYPE_INT, "", null)
-	for x in range(sprite_variation_count):
+	for x in range(sprites.size()):
 		if recent_sprites.has(x) == false:
 			possible_choices.append(x)
 			

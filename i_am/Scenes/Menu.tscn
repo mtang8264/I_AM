@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://ohh48gw4m45a"]
+[gd_scene load_steps=5 format=3 uid="uid://ohh48gw4m45a"]
 
 [ext_resource type="Script" path="res://Scripts/BackgroundController.gd" id="1_0mq40"]
 [ext_resource type="Script" path="res://Scripts/MenuController.gd" id="1_ma3if"]
 [ext_resource type="Script" path="res://Scripts/WordSpriteController.gd" id="2_36q6n"]
+[ext_resource type="Texture2D" uid="uid://bkigoni2jk6sn" path="res://Sprites/Words/Word_I/Word_I_0.png" id="3_3bxvt"]
 
 [node name="Root" type="Node2D"]
 script = ExtResource("1_ma3if")
@@ -17,6 +18,5 @@ script = ExtResource("1_0mq40")
 [node name="Word_I" type="Node2D" parent="."]
 
 [node name="Sprite2D" type="Sprite2D" parent="Word_I"]
+texture = ExtResource("3_3bxvt")
 script = ExtResource("2_36q6n")
-path_to_sprites = "res://Sprites/Words/Word_I_"
-sprite_variation_count = 10

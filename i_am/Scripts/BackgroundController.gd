@@ -1,6 +1,8 @@
 extends Polygon2D
 
+## The color the background should be.
 @export var color_current: Color
+## How far the bleed zone for the background should be as a percentage of the viewport's size.
 var bleed_percentage : float = 0.05
 
 func _init():
@@ -10,8 +12,10 @@ func _ready():
 	calculate_size()
 
 func _process(delta):
+	color = color_current
 	pass
 
+## Calculate the size the background should be given the bleed percentage and sets it to be that size.
 func calculate_size():
 	var viewport_size = get_viewport().get_visible_rect().size
 	var bleed_x = viewport_size.x * bleed_percentage

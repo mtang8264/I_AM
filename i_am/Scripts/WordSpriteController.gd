@@ -8,16 +8,16 @@ var file_extention: String = ".png"
 # Array of all the textures for the word
 var sprites = Array([], TYPE_OBJECT, "CompressedTexture2D", null)
 
-# A range of of the number of seconds the sprite waits to change
+## A range of the possible durations for each sprite to be shown for.
 @export var change_time_range: Vector2 = Vector2(0.15,0.25)
-# Timer to track when the sprite should change
+## The timer to track when the sprite should change.
 var change_timer:float = 0
 
-# The index in the sprites array of the current sprite 
+## The index in the sprites array of the current sprite 
 var current_sprite_index = 0
-# Memory of the most recent sprites used so they do not reappear too soon
+## Memory of the most recent sprites used so they do not reappear too soon
 var recent_sprites = Array([], TYPE_INT, "", null)
-# The length of the memory for when not to reuse a sprite
+## The length of the memory for when not to reuse a sprite
 var recent_sprites_memory_slots = 5
 
 func _ready():
@@ -30,7 +30,7 @@ func _process(delta):
 	if change_timer <= 0:
 		change_sprite()
 
-# Finds the resource files for the sprites and 
+## Finds the resource files for the sprites and 
 func load_sprites():
 	# The directory which the starting texture is held within
 	var dir = DirAccess.open( texture.resource_path.left( texture.resource_path.rfind("/")))
@@ -45,7 +45,7 @@ func load_sprites():
 		if file.ends_with(".png"):
 			sprites.append(load(file))
 
-# Called when the sprite is changed.
+## Void function to change the sprite. Called when the timer has reached zero.
 func change_sprite():
 	# Create a list of all the indexes that have not been used recently
 	var possible_choices = Array([], TYPE_INT, "", null)

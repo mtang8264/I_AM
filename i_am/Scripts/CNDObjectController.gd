@@ -1,6 +1,24 @@
 # A script to control objects that are meant to be clicked and dragged
 extends Node2D
 
+@export_category("Drag Options")
+enum Drag_Modes {
+	## The object will use the default drag options assigned by GameManager.gd.
+	DEFAULT = -1,
+	## The object will immediately appear at the position of the mouse.
+	INSTANT = 0,
+	## The object will move at a specified speed per second toward the mouse.
+	LINEAR_SPEED = 1,
+	## The object will move a given percentage of the way to the mouse every frame.
+	LERP = 2}
+## The drag mode that should be used for this object.
+@export var drag_mode: Drag_Modes = Drag_Modes.DEFAULT
+## The value used by the object to determine its movement for some Drag Modes.[br]
+## [b]INSTANT:[/b] No drag_value is needed.[br]
+## [b]LINEAR_SPEED:[/b] drag_value is the speed the object moves per second. Values need to be very high, around 1000.[br]
+## [b]LERP:[/b] drag_value is the percentage of the distance moved each frame. Should be between 0 and 1. Ideally around 0.1.
+@export var drag_value: float = 0
+
 # References to the child nodes used to make the script work
 var body : StaticBody2D
 var shape : CollisionShape2D
@@ -17,11 +35,15 @@ var held: bool = false
 var held_starting_mouse_offset: Vector2 = Vector2.ZERO
 
 func _ready():
+	if drag_mode == Drag_Modes.DEFAULT:
+		drag_mode = int(GameManager.drag_mode_default)
+		drag_value = GameManager.drag_value_default
+	
 	assign_child_variables()
 	calculate_bounds()
 
 func _process(delta):
-	drag()
+	drag(delta)
 	calculate_bounds()
 	if not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		release()
@@ -71,9 +93,22 @@ func release():
 	held = false
 	held_starting_mouse_offset = Vector2.ZERO
 
-func drag():
 ## Moves the object to the correct position given the mouse's new position
+func drag(delta: float):
 	if not held:
 		return
 	var mouse_pos = get_viewport().get_mouse_position()
-	position = mouse_pos + held_starting_mouse_offset
+	var target_pos = mouse_pos + held_starting_mouse_offset
+	
+	match drag_mode:
+		Drag_Modes.INSTANT:
+			position = target_pos
+		Drag_Modes.LINEAR_SPEED:
+			var dir = position.direction_to(target_pos)
+			var new_pos = position + (dir*drag_value*delta)
+			position = new_pos
+			return
+		Drag_Modes.LERP:
+			var new_pos = (target_pos * drag_value) + (position * (1-drag_value))
+			position = new_pos
+			return

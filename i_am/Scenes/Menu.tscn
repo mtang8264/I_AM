@@ -13,8 +13,10 @@ size = Vector2(131, 191)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1papw"]
 size = Vector2(217, 191)
 
-[node name="Root" type="Node2D"]
+[node name="Root" type="Node2D" node_paths=PackedStringArray("word_i", "word_am")]
 script = ExtResource("1_ma3if")
+word_i = NodePath("Word_I")
+word_am = NodePath("Word_Am")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
@@ -24,7 +26,7 @@ color = Color(1, 0, 1, 1)
 script = ExtResource("1_0mq40")
 
 [node name="Word_I" type="Node2D" parent="."]
-position = Vector2(413, 232)
+position = Vector2(739, 232)
 script = ExtResource("3_xiapn")
 
 [node name="Sprite2D" type="Sprite2D" parent="Word_I"]
@@ -38,7 +40,7 @@ script = ExtResource("2_36q6n")
 shape = SubResource("RectangleShape2D_lxnso")
 
 [node name="Word_Am" type="Node2D" parent="."]
-position = Vector2(689, 234)
+position = Vector2(483, 236)
 script = ExtResource("3_xiapn")
 
 [node name="Sprite2D" type="Sprite2D" parent="Word_Am"]

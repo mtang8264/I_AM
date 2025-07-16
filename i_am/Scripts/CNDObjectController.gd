@@ -124,6 +124,7 @@ func drag(delta: float):
 		var mouse_pos = get_viewport().get_mouse_position()
 		set_target_position(mouse_pos + held_starting_mouse_offset)
 	
+	# Determines the new position given the current drag_mode
 	match drag_mode:
 		Drag_Modes.INSTANT:
 			position = target_position
@@ -137,7 +138,6 @@ func drag(delta: float):
 			var new_pos = (target_position * drag_value) + (position * (1-drag_value))
 			if position.distance_to(new_pos) > drag_max_speed_per_second * delta:
 				new_pos = position.move_toward(target_position, drag_max_speed_per_second*delta)
-			print(new_pos)
 			position = new_pos
 
 func set_target_position(pos: Vector2):

@@ -20,18 +20,18 @@ enum Drag_Modes {
 @export var drag_value: float = 0
 
 # References to the child nodes used to make the script work
-var body : StaticBody2D
-var shape : CollisionShape2D
+var body : StaticBody2D ## The StaticBody2D that is childed to this node.
+var shape : CollisionShape2D ## The CollisionShape2D that is childed to this node.
 
-# The bounds of where the click detection should check
+## The bounds of where the click detection should check
 var bound_left : float
 var bound_right: float
 var bound_top: float
 var bound_bottom: float
 
-# Boolean storage of whether or not the object is being held
+## Boolean storage of whether or not the object is being held
 var held: bool = false
-# Vector2 storage of the offset from the mouse when the object began being held
+## Vector2 storage of the offset from the mouse when the object began being held
 var held_starting_mouse_offset: Vector2 = Vector2.ZERO
 
 func _ready():

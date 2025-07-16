@@ -15,7 +15,9 @@ enum Drag_Modes {
 	## The object will move at a specified speed per second toward the mouse.
 	LINEAR_SPEED = 1,
 	## The object will move a given percentage of the way to the mouse every frame.
-	LERP = 2}
+	LERP = 2,
+	## The object will move a given percentage of the way to the mouse every frame up to a maximum speed per second.
+	LERP_BOUND = 3}
 ## The drag mode that should be used for this object.
 @export var drag_mode: Drag_Modes = Drag_Modes.DEFAULT
 ## The value used by the object to determine its movement for some Drag Modes.[br]
@@ -23,6 +25,8 @@ enum Drag_Modes {
 ## [b]LINEAR_SPEED:[/b] drag_value is the speed the object moves per second. Values need to be very high, around 1000.[br]
 ## [b]LERP:[/b] drag_value is the percentage of the distance moved each frame. Should be between 0 and 1. Ideally around 0.1.
 @export var drag_value: float = 0
+## THe maximum speed in pixels per second the object can move to get to its target. Only used for Drag_Modes.LERP_BOUND.
+@export var drag_max_speed_per_second: float = 0
 
 # References to the child nodes used to make the script work
 var body : StaticBody2D ## The StaticBody2D that is childed to this node.
@@ -48,6 +52,7 @@ func _ready():
 	if drag_mode == Drag_Modes.DEFAULT:
 		drag_mode = int(GameManager.drag_mode_default)
 		drag_value = GameManager.drag_value_default
+		drag_max_speed_per_second = GameManager.drag_max_speed_per_second_default
 	
 	assign_child_variables()
 	calculate_bounds()
@@ -123,14 +128,17 @@ func drag(delta: float):
 		Drag_Modes.INSTANT:
 			position = target_position
 		Drag_Modes.LINEAR_SPEED:
-			var dir = position.direction_to(target_position)
-			var new_pos = position + (dir*drag_value*delta)
+			var new_pos = position.move_toward(target_position, drag_value*delta)
 			position = new_pos
-			return
 		Drag_Modes.LERP:
 			var new_pos = (target_position * drag_value) + (position * (1-drag_value))
 			position = new_pos
-			return
+		Drag_Modes.LERP_BOUND:
+			var new_pos = (target_position * drag_value) + (position * (1-drag_value))
+			if position.distance_to(new_pos) > drag_max_speed_per_second * delta:
+				new_pos = position.move_toward(target_position, drag_max_speed_per_second*delta)
+			print(new_pos)
+			position = new_pos
 
 func set_target_position(pos: Vector2):
 	target_position = pos

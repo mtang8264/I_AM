@@ -1,6 +1,11 @@
 # A script to control objects that are meant to be clicked and dragged
 extends Node2D
 
+## Is the object currently grabbable
+@export var is_grabbable: bool = true
+## Should the object continue to move
+@export var should_move: bool = true
+
 @export_category("Drag Options")
 enum Drag_Modes {
 	## The object will use the default drag options assigned by GameManager.gd.
@@ -34,7 +39,12 @@ var held: bool = false
 ## Vector2 storage of the offset from the mouse when the object began being held
 var held_starting_mouse_offset: Vector2 = Vector2.ZERO
 
+## The position that the object wants to be at.
+var target_position: Vector2 = Vector2.ZERO
+
 func _ready():
+	set_target_position(position)
+	
 	if drag_mode == Drag_Modes.DEFAULT:
 		drag_mode = int(GameManager.drag_mode_default)
 		drag_value = GameManager.drag_value_default
@@ -45,7 +55,8 @@ func _ready():
 func _process(delta):
 	drag(delta)
 	calculate_bounds()
-	if not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+	# If the left mouse button is not being held or the object is no longer grabbable, the object should be released.
+	if not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) or not is_grabbable:
 		release()
 
 func _input(event):
@@ -83,6 +94,10 @@ func is_input_event_left_mouse_down_on_obj(event):
 
 ## Void function used to mark the object as held
 func hold(mouse_pos: Vector2):
+	# Immediately exit the function if the object is not currently grabbable
+	if not is_grabbable:
+		return
+		
 	# Set the held variable to true
 	held = true
 	# Record the mouse position at the moment the object begins being held
@@ -95,20 +110,27 @@ func release():
 
 ## Moves the object to the correct position given the mouse's new position
 func drag(delta: float):
-	if not held:
+	# If the object should not move then we don't want this func to execute
+	if not should_move:
 		return
-	var mouse_pos = get_viewport().get_mouse_position()
-	var target_pos = mouse_pos + held_starting_mouse_offset
+	# If the object is currently being held then the target position is based on mouse position
+	# There are theoretically other reasons the object should move so the script continues if this is not true
+	if held:
+		var mouse_pos = get_viewport().get_mouse_position()
+		set_target_position(mouse_pos + held_starting_mouse_offset)
 	
 	match drag_mode:
 		Drag_Modes.INSTANT:
-			position = target_pos
+			position = target_position
 		Drag_Modes.LINEAR_SPEED:
-			var dir = position.direction_to(target_pos)
+			var dir = position.direction_to(target_position)
 			var new_pos = position + (dir*drag_value*delta)
 			position = new_pos
 			return
 		Drag_Modes.LERP:
-			var new_pos = (target_pos * drag_value) + (position * (1-drag_value))
+			var new_pos = (target_position * drag_value) + (position * (1-drag_value))
 			position = new_pos
 			return
+
+func set_target_position(pos: Vector2):
+	target_position = pos

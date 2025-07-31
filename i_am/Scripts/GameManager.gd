@@ -19,5 +19,26 @@ enum Drag_Modes {
 ## THe maximum speed in pixels per second the object can move to get to its target. Only used for Drag_Modes.LERP_BOUND.
 @export var drag_max_speed_per_second_default: float = 1500
 
+var cursors = Array([], TYPE_OBJECT, "CompressedTexture2D", null)
+var cursor_path = "res://Sprites/Cursor/Pointer_000"
+var cursor_timer = 0.2
+var cursor_change_time = Vector2(0.15, 0.25)
+
 func _ready():
 	randomize()
+	load_cursors()
+	Input.set_custom_mouse_cursor(cursors[0])
+
+func _process(delta):
+	cursor_timer = cursor_timer - delta
+	if cursor_timer <= 0:
+		print("Changing cursor")
+		cursor_timer = randf_range(cursor_change_time.x, cursor_change_time.y)
+		var r = randi() % cursors.size()
+		print("Using cursor option " + str(r))
+		Input.set_custom_mouse_cursor(cursors[r])
+
+func load_cursors():
+	for x in range(0,9):
+		cursors.append(load(cursor_path + str(x) + ".png"))
+	print("Loaded " + str(cursors.size()) + "cursors")
